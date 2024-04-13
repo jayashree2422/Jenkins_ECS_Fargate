@@ -1,0 +1,36 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main  # or whatever your main branch is
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Jenkins plugins
+        run: |
+          ./install-plugins.sh ec2
+
+      - name: Deploy Jenkins on ECS Fargate
+        run: |
+          cd terraform
+          terraform init
+          terraform apply -auto-approve
+
+      - name: Run Jenkins job
+        run: |
+          # Assuming you have the Jenkins CLI installed
+          # Adjust the URL and credentials as needed
+          java -jar jenkins-cli.jar -s $JENKINS_URL -auth $JENKINS_USER:$JENKINS_TOKEN build PipelineJob
+
+      - name: Push updated configuration to GitHub
+        run: |
+          git add .
+          git commit -m "Update Jenkins configuration"
+          git push origin main
