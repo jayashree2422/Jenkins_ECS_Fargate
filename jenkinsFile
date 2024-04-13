@@ -1,0 +1,10 @@
+pipeline {
+    agent any
+    stages {
+        stage('Job') {
+            steps {
+                echo 'Deploy a production-ready Jenkins on ECS Fargate'
+            }
+        }
+    }
+}
