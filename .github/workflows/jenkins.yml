@@ -13,6 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: permission to plugins
+        run: |
+          curl -O https://raw.githubusercontent.com/jenkinsci/docker/master/install-plugins.sh
+          chmod +x install-plugins.sh
+
       - name: Install Jenkins plugins
         run: |
           ./install-plugins.sh ec2
